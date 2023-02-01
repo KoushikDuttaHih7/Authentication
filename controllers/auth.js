@@ -1,3 +1,4 @@
+const user = require("../models/user");
 const User = require("../models/user");
 
 // This is for Login view
@@ -34,7 +35,32 @@ exports.postLogin = (req, res, next) => {
 };
 
 // This is for Signup view
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  User.findOne({ email: email })
+    .then((userDoc) => {
+      if (userDoc) {
+        return res.redirect("/signup");
+      }
+      const user = new User({
+        email: email,
+        password: password,
+        cart: { items: [] },
+      });
+      return user.save();
+    })
+    .then((results) => {
+      res.redirect("/login");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+// User.findOne({ email: email })
+// right email -> the email we are extracting
+// left email -> the feild we are looking for in the database
 
 // This is for Logout view
 exports.postLogout = (req, res, next) => {
