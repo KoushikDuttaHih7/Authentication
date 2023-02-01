@@ -10,6 +10,15 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+// // This is for Signup view
+exports.getSignup = (req, res, next) => {
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Signup",
+    isAuthenticated: false,
+  });
+};
+
 // This is for Login view
 exports.postLogin = (req, res, next) => {
   User.findById("63d9f10468651c6b61dbf7a3")
@@ -23,6 +32,9 @@ exports.postLogin = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+// This is for Signup view
+exports.postSignup = (req, res, next) => {};
 
 // This is for Logout view
 exports.postLogout = (req, res, next) => {
