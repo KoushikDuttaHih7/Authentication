@@ -83,7 +83,7 @@ exports.postEditProduct = (req, res, next) => {
 
 // To show products in the Admin products page
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .select("title price -_id") // This will just show title price
     // .populate("userId", "name") // This will show extra information of userId
     .then((products) => {
