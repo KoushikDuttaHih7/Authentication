@@ -150,35 +150,33 @@ exports.postReset = (req, res, next) => {
       return res.redirect("/reset");
     }
     const token = buffer.toString("hex");
-    User.findOne(
-      { email: req.body.email }
-        .then((user) => {
-          if (!user) {
-            req.flash(
-              "error",
-              "No account with this Email has been found, You may not have an account with this Email"
-            );
-            return res.redirect("/reset");
-          }
-          (user.resetToken = token),
-            (user.resetTokenExpiration = Date.now() + 3600000);
-          return user.save();
-        })
-        .then((result) => {
-          res.redirect("/");
-          transporter.sendMail({
-            to: req.body.email,
-            from: "koushik.dutta@hih7.in",
-            subject: "Password reset!",
-            html: `
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user) {
+          req.flash(
+            "error",
+            "No account with this Email has been found, You may not have an account with this Email"
+          );
+          return res.redirect("/reset");
+        }
+        (user.resetToken = token),
+          (user.resetTokenExpiration = Date.now() + 3600000);
+        return user.save();
+      })
+      .then((result) => {
+        res.redirect("/");
+        transporter.sendMail({
+          to: req.body.email,
+          from: "koushik.dutta@hih7.in",
+          subject: "Password reset!",
+          html: `
             <p>Requested Password Reset</p>
             <p>Click <a href="http://localhost:3000/reset/${token}">here</a> to set a new password</p>
             `,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 };
