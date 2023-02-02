@@ -181,6 +181,7 @@ exports.postReset = (req, res, next) => {
   });
 };
 
+// This is for update password view
 exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
@@ -204,6 +205,7 @@ exports.getNewPassword = (req, res, next) => {
     });
 };
 
+// This is for setting new password
 exports.postNewPassword = (req, res, next) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;
